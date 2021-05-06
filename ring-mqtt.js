@@ -279,6 +279,7 @@ function initMqtt() {
     const mqtt = mqttApi.connect({
         host:CONFIG.host,
         port:CONFIG.port,
+		clientId: CONFIG.mqtt_clientid,
         username: CONFIG.mqtt_user,
         password: CONFIG.mqtt_pass
     });
@@ -328,6 +329,7 @@ async function initConfig(configFile) {
             "port": process.env.MQTTPORT,
             "ring_topic": process.env.MQTTRINGTOPIC,
             "hass_topic": process.env.MQTTHASSTOPIC,
+            "mqtt_clientid": process.env.MQTTCLIENTID,
             "mqtt_user": process.env.MQTTUSER,
             "mqtt_pass": process.env.MQTTPASSWORD,
             "ring_token": process.env.RINGTOKEN,
@@ -345,6 +347,7 @@ async function initConfig(configFile) {
     if (process.env.HASSADDON) {
         CONFIG.host = process.env.MQTTHOST
         CONFIG.port = process.env.MQTTPORT
+		CONFIG.mqtt_clientid = process.env.MQTTCLIENTID
         CONFIG.mqtt_user = process.env.MQTTUSER
         CONFIG.mqtt_pass = process.env.MQTTPASSWORD
     }
@@ -352,6 +355,7 @@ async function initConfig(configFile) {
     // If there's still no configured settings, force some defaults.
     CONFIG.host = CONFIG.host ? CONFIG.host : 'localhost'
     CONFIG.port = CONFIG.port ? CONFIG.port : '1883'
+    CONFIG.mqtt_clientid  = CONFIG.mqtt_clientid ? CONFIG.mqtt_clientid : 'ring-mqtt'
     CONFIG.ring_topic = CONFIG.ring_topic ? CONFIG.ring_topic : 'ring'
     CONFIG.hass_topic = CONFIG.hass_topic ? CONFIG.hass_topic : 'homeassistant/status'
     if (!CONFIG.enable_cameras) { CONFIG.enable_cameras = false }

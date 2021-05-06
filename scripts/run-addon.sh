@@ -14,6 +14,7 @@ echo "-------------------------------------------------------"
 # Setup the MQTT environment options based on addon configuration settings
 export MQTTHOST=$(bashio::config "mqtt_host")
 export MQTTPORT=$(bashio::config "mqtt_port")
+export MQTTCLIENTID=$(bashio::config "mqtt_clientid")
 export MQTTUSER=$(bashio::config "mqtt_user")
 export MQTTPASSWORD=$(bashio::config "mqtt_password")
 
@@ -45,6 +46,18 @@ if [ $MQTTPORT = '<auto_detect>' ]; then
     fi
 else
     echo "Using configured MQTT Port: ${MQTTPORT}"
+fi
+
+if [ $MQTTCLIENTID = '<auto_detect>' ]; then
+    if bashio::services.available 'mqtt'; then
+        MQTTCLIENTID=$(bashio::services mqtt "clientid")
+        echo "Using discovered MQTT Client Id: ${MQTTCLIENTID}"
+    else
+        MQTTCLIENTID=""
+        echo "Using anonymous MQTT connection"
+    fi
+else
+    echo "Using configured MQTT Client Id: ${MQTTCLIENTID}"
 fi
 
 if [ $MQTTUSER = '<auto_detect>' ]; then
